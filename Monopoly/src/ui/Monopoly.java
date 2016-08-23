@@ -70,7 +70,7 @@ public class Monopoly extends JFrame {
 	private final JPanel panel_6 = new JPanel();
 	private final JLabel lblPot = new JLabel("POT");
 	private final JLabel lblNewLabel_6 = new JLabel("$10,000.00");
-	private final JLabel lblNewLabel_7 = new JLabel("New label");
+	private final JLabel lblNewLabel_7 = new JLabel("");
 	private final JPanel panel_7 = new JPanel();
 	private final JLabel label_3 = new JLabel("");
 	private final JButton btnNewButton_12 = new JButton("Transfer");
@@ -327,7 +327,6 @@ public class Monopoly extends JFrame {
 		panel_7.setBounds(1540, 725, 286, 288);
 		
 		contentPane.add(panel_7);
-		label_3.setIcon(new ImageIcon("src\\free_parking.jpg"));
 		
 		panel_7.add(label_3);
 		lblNewLabel_7.setIcon(new ImageIcon("src\\background.jpg"));
