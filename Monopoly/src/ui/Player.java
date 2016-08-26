@@ -10,44 +10,27 @@ package ui;
 import java.awt.Point;
 import java.io.IOException;
 
-public abstract class Player {
+public class Player {
 	/* The name of the player */
 	public String name;
-	/* Current Game */
-	public Game game;
-	/* high scores */
+	/* amount of money */
+	public int money;
+	/* File name of pic */
+	public String filename;
 	
 	/**
  	 * Constructor of the Player class
 	 */
 	public Player() {
+		this.name = "";
+		this.money = 1500;
+		this.filename = "";
 	}
 	
-	public Player(String name) {
+	public Player(String name, int money, String filename) {
 		this.name = name;
-	}
-	
-	public Game getCurrentGame() {
-		return game;
-	}
-	
-	public void setCurrentGame(Game game) {
-		this.game = game;
-	}
-	
-	/**
-	 * Make move method for the players
-	 * 
-	 * @return The point where the move was made
-	 * @throws IOException
-	 */
-	public abstract Point makeMove() throws IOException;
-	
-	/**
-	 * Shows the score of the player
-	 */
-	public void showScore() {
-		
+		this.money = money;
+		this.filename = filename;
 	}
 	
 	/**
@@ -59,6 +42,14 @@ public abstract class Player {
 		return name;
 	}
 	
+	public int getMoney() {
+		return money;
+	}
+	
+	public String getFilename() {
+		return filename;
+	}
+	
 	/**
 	 * Setter method for the name
 	 * 
@@ -66,6 +57,14 @@ public abstract class Player {
 	 */
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	public void setMoney(int money) {
+		this.money = money;
+	}
+	
+	public void setFilename(String filename) {
+		this.filename = filename;
 	}
 
 }
