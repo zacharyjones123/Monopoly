@@ -63,6 +63,15 @@ public class Player {
 		this.money = money;
 	}
 	
+	public void addMoney(int money){
+		this.money += money;
+	}
+	
+	public void removeMoney(int money) throws IllegalArgumentException{
+		if(this.money - money < 0)
+			throw new IllegalArgumentException("Can't go negative");
+		this.money -= money;
+	}
 	public void setFilename(String filename) {
 		this.filename = filename;
 	}

@@ -34,8 +34,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 
-public class Monopoly extends JFrame {
-
+public class Monopoly extends JFrame implements ActionListener{
+	private String[] playerlist = {"Bailey", "Sean", "Isaiah", "Tyler", "Alex", "Pot"};
 	private JPanel contentPane;
 	private final JPanel panel = new JPanel();
 	private final JLabel lblMonopolyBank = new JLabel("Monopoly Bank");
@@ -44,48 +44,48 @@ public class Monopoly extends JFrame {
 	private final JPanel panel_3 = new JPanel();
 	private final JPanel panel_4 = new JPanel();
 	private final JPanel panel_5 = new JPanel();
-	private final JLabel lblNewLabel = new JLabel("");
+	private final JLabel lblNewLabel = new JLabel("Blueberry");
 	private final JLabel lblNewLabel_1 = new JLabel("");
 	private final JLabel lblNewLabel_2 = new JLabel("");
 	private final JLabel lblNewLabel_3 = new JLabel("");
-	private final JButton btnNewButton = new JButton("+$200");
-	private final JButton btnNewButton_1 = new JButton("Add Money");
-	private final JButton btnNewButton_2 = new JButton("Remove Money");
-	private final JButton btnNewButton_3 = new JButton("+$200");
-	private final JButton btnNewButton_4 = new JButton("Add Money");
-	private final JButton btnNewButton_5 = new JButton("Remove Money");
-	private final JButton btnNewButton_6 = new JButton("+$200");
-	private final JButton btnNewButton_7 = new JButton("Add Money");
-	private final JButton btnNewButton_8 = new JButton("Remove Money");
-	private final JButton btnNewButton_9 = new JButton("+$200");
-	private final JButton btnNewButton_10 = new JButton("Add Money");
-	private final JButton btnNewButton_11 = new JButton("Remove Money");
-	private final JLabel lblNewLabel_8 = new JLabel("$1000.20");
-	private final JLabel label = new JLabel("$1000.20");
-	private final JLabel label_1 = new JLabel("$1000.20");
-	private final JLabel label_2 = new JLabel("$1000.20");
-	private final JTextField textField = new JTextField();
-	private final JTextField textField_1 = new JTextField();
-	private final JTextField textField_2 = new JTextField();
-	private final JTextField textField_3 = new JTextField();
+	private final JButton p1Add200Button = new JButton("+$200");
+	private final JButton p1AddMoneyButton = new JButton("Add Money");
+	private final JButton p1RemoveMoneyButton = new JButton("Remove Money");
+	private final JButton p2Add200Button = new JButton("+$200");
+	private final JButton p2AddMoneyButton = new JButton("Add Money");
+	private final JButton p2RemoveMoneyButton = new JButton("Remove Money");
+	private final JButton p3Add200Button = new JButton("+$200");
+	private final JButton p3AddMoneyButton = new JButton("Add Money");
+	private final JButton p3RemoveMoneyButton = new JButton("Remove Money");
+	private final JButton p4Add200Button = new JButton("+$200");
+	private final JButton p4AddMoneyButton = new JButton("Add Money");
+	private final JButton p4RemoveMoneyButton = new JButton("Remove Money");
+	private final JLabel player_label1 = new JLabel("$"+Integer.toString(DEFAULT_MONEY));
+	private final JLabel player_label2 = new JLabel("$"+Integer.toString(DEFAULT_MONEY));
+	private final JLabel player_label3 = new JLabel("$" + Integer.toString(DEFAULT_MONEY));
+	private final JLabel player_label4 = new JLabel("$" + Integer.toString(DEFAULT_MONEY));
+	private final JTextField p1MoneyAmount = new JTextField();
+	private final JTextField p2MoneyAmount = new JTextField();
+	private final JTextField p3MoneyAmount = new JTextField();
+	private final JTextField p4MoneyAmount = new JTextField();
 	private final JPanel panel_6 = new JPanel();
 	private final JLabel lblPot = new JLabel("Transfer");
-	private final JLabel lblNewLabel_6 = new JLabel("$10,000.00");
+	private final JLabel potMoney = new JLabel("$0");
 	private final JLabel lblNewLabel_7 = new JLabel("");
-	private final JButton btnNewButton_12 = new JButton("Transfer");
-	private final JComboBox comboBox = new JComboBox();
-	private final JComboBox comboBox_1 = new JComboBox();
-	private final JTextField textField_4 = new JTextField();
+	private final JButton transferButton = new JButton("Transfer");
+	private final JComboBox transferFromBox = new JComboBox();
+	private final JComboBox transferToBox = new JComboBox();
+	private final JTextField transferAmount = new JTextField();
 	private final JPanel panel_7 = new JPanel();
 	private final JLabel label_3 = new JLabel("");
 	private final JLabel label_4 = new JLabel("");
-	
-	private static Player[] players = new Player[4];
-	private final JComboBox comboBox_2 = new JComboBox();
-	private final JComboBox comboBox_3 = new JComboBox();
-	private final JComboBox comboBox_4 = new JComboBox();
-	private final JComboBox comboBox_5 = new JComboBox();
-
+	private final static int DEFAULT_MONEY = 1500;
+	private static Player[] players = new Player[5];
+	private final JComboBox p1DropDown = new JComboBox();
+	private final JComboBox p2DropDown = new JComboBox();
+	private final JComboBox p3DropDown = new JComboBox();
+	private final JComboBox p4DropDown = new JComboBox();
+	private static String[] listPlaying; 
 	/**
 	 * Launch the application.
 	 */
@@ -93,12 +93,13 @@ public class Monopoly extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
+					players[0] = new Player("Isaiah", DEFAULT_MONEY, "dummy");
+					players[1] = new Player("Sean", DEFAULT_MONEY, "dummy");
+					players[2] = new Player("Bailey", DEFAULT_MONEY, "Dummy");
+					players[3] = new Player("Tyler", DEFAULT_MONEY , "dummy");
+					players[4] = new Player("POT", 0, "pot.jpg");
+					listPlaying = new String[]{players[0].getName(), players[1].getName(), players[2].getName(), players[3].getName(), players[4].getName()};
 					Monopoly frame = new Monopoly();
-					players[0] = new Player();
-					players[1] = new Player();
-					players[2] = new Player();
-					players[3] = new Player();
-					
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -111,17 +112,18 @@ public class Monopoly extends JFrame {
 	 * Create the frame.
 	 */
 	public Monopoly() {
-		textField_4.setBounds(384, 143, 196, 43);
-		textField_4.setColumns(10);
-		textField_3.setBackground(Color.WHITE);
-		textField_3.setBounds(100, 323, 256, 47);
-		textField_3.setColumns(10);
-		textField_2.setBounds(100, 321, 256, 47);
-		textField_2.setColumns(10);
-		textField_1.setBounds(110, 313, 246, 47);
-		textField_1.setColumns(10);
-		textField.setBounds(100, 322, 256, 47);
-		textField.setColumns(10);
+		transferAmount.setBounds(384, 143, 196, 43);
+		transferAmount.setColumns(10);
+		transferAmount.setFont(new Font("Tahoma", Font.PLAIN, 25));
+		p4MoneyAmount.setBackground(Color.WHITE);
+		p4MoneyAmount.setBounds(100, 323, 256, 47);
+		p4MoneyAmount.setColumns(10);
+		p3MoneyAmount.setBounds(100, 321, 256, 47);
+		p3MoneyAmount.setColumns(10);
+		p2MoneyAmount.setBounds(110, 313, 246, 47);
+		p2MoneyAmount.setColumns(10);
+		p1MoneyAmount.setBounds(100, 322, 256, 47);
+		p1MoneyAmount.setColumns(10);
 		initGUI();
 	}
 	private void initGUI() {
@@ -149,39 +151,84 @@ public class Monopoly extends JFrame {
 		
 		contentPane.add(panel_1);
 		panel_1.setLayout(null);
-		lblNewLabel_8.setBounds(10, 447, 420, 92);
-		lblNewLabel_8.setBackground(Color.WHITE);
-		lblNewLabel_8.setOpaque(true);
-		panel_1.add(lblNewLabel_8);
-		lblNewLabel_8.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel_8.setFont(new Font("Comic Sans MS", Font.PLAIN, 50));
-		lblNewLabel_8.setForeground(new Color(0, 128, 0));
+		player_label1.setBounds(10, 447, 420, 92);
+		player_label1.setBackground(Color.WHITE);
+		player_label1.setOpaque(true);
+		panel_1.add(player_label1);
+		player_label1.setHorizontalAlignment(SwingConstants.CENTER);
+		player_label1.setFont(new Font("Comic Sans MS", Font.PLAIN, 50));
+		player_label1.setForeground(new Color(0, 128, 0));
 		lblNewLabel.setBounds(100, 70, 256, 170);
 		lblNewLabel.setIcon(new ImageIcon("resources\\monopoly.png"));
 		
 		panel_1.add(lblNewLabel);
-		btnNewButton.setBackground(new Color(0, 128, 0));
-		btnNewButton.setForeground(Color.BLACK);
-		btnNewButton.setFont(new Font("Tahoma", Font.PLAIN, 25));
-		btnNewButton.setBounds(100, 270, 256, 40);
+		p1Add200Button.setBackground(new Color(0, 128, 0));
+		p1Add200Button.setForeground(Color.BLACK);
+		p1Add200Button.setFont(new Font("Tahoma", Font.PLAIN, 25));
+		p1Add200Button.setBounds(100, 270, 256, 40);
+		p1Add200Button.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("Adding 200 to p1!");
+				System.out.println(players[0].getName());
+				players[0].addMoney(200);
+				player_label1.setText("$" + Integer.toString(players[0].getMoney()));
+				panel_1.repaint();
+			}
+		});
 		
-		panel_1.add(btnNewButton);
-		btnNewButton_1.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		btnNewButton_1.setBackground(new Color(0, 128, 0));
-		btnNewButton_1.setBounds(100, 380, 256, 23);
+		panel_1.add(p1Add200Button);
 		
-		panel_1.add(btnNewButton_1);
-		btnNewButton_2.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		btnNewButton_2.setBackground(new Color(165, 42, 42));
-		btnNewButton_2.setBounds(100, 414, 256, 23);
+		p1AddMoneyButton.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		p1AddMoneyButton.setBackground(new Color(0, 128, 0));
+		p1AddMoneyButton.setBounds(100, 380, 256, 23);
+		p1AddMoneyButton.addActionListener((new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("Adding 200! P1");
+				System.out.println(players[0].getName());
+				players[0].addMoney(Integer.parseInt(p1MoneyAmount.getText()));
+				player_label1.setText("$" + Integer.toString(players[0].getMoney()));
+				panel_1.repaint();
+			}
+		}));
 		
-		panel_1.add(btnNewButton_2);
+		panel_1.add(p1AddMoneyButton);
+		p1RemoveMoneyButton.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		p1RemoveMoneyButton.setBackground(new Color(165, 42, 42));
+		p1RemoveMoneyButton.setBounds(100, 414, 256, 23);
+		p1RemoveMoneyButton.addActionListener((new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("Adding special money");
+				System.out.println(players[0].getName());
+				try{
+					players[0].removeMoney(Integer.parseInt(p1MoneyAmount.getText()));
+				player_label1.setText("$" + Integer.toString(players[0].getMoney()));
+				panel_1.repaint();
+				}
+				catch (IllegalArgumentException e1){
+					JFrame error = new JFrame(players[0].getName());
+					error.setSize(675, 200);
+					JLabel errormsg = new JLabel("Insufficient Funds! Mortgage or Bankrupt!");
+					errormsg.setFont(new Font("Tahoma", Font.BOLD, 30));
+					errormsg.setForeground(Color.red);
+					error.add(errormsg);
+					error.setLocationRelativeTo(null);
+					error.setVisible(true);}
+			}
+		}));
 		
-		panel_1.add(textField);
-		comboBox_2.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		comboBox_2.setBounds(129, 11, 199, 53);
+		panel_1.add(p1RemoveMoneyButton);
 		
-		panel_1.add(comboBox_2);
+		panel_1.add(p1MoneyAmount);
+		p1DropDown.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		p1DropDown.setBounds(129, 11, 199, 53);
+		p1DropDown.setModel(new DefaultComboBoxModel<String>(playerlist));
+		p1DropDown.addActionListener((new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				players[0].setName((String) p1DropDown.getSelectedItem());
+				//repaint panel + change label!
+		}}));
+		p1DropDown.setSelectedItem(players[0].getName());
+		panel_1.add(p1DropDown);
 		panel_2.setBorder(new LineBorder(new Color(0, 0, 0), 10, true));
 		panel_2.setBounds(490, 149, 440, 550);
 		
@@ -191,39 +238,81 @@ public class Monopoly extends JFrame {
 		lblNewLabel_1.setIcon(new ImageIcon("resources//monopoly.png"));
 		
 		panel_2.add(lblNewLabel_1);
-		btnNewButton_3.setBackground(new Color(0, 128, 0));
-		btnNewButton_3.setFont(new Font("Tahoma", Font.PLAIN, 25));
-		btnNewButton_3.setBounds(110, 268, 256, 40);
-		
-		panel_2.add(btnNewButton_3);
-		btnNewButton_4.setBackground(new Color(0, 128, 0));
-		btnNewButton_4.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		btnNewButton_4.addActionListener(new ActionListener() {
+		p2Add200Button.setBackground(new Color(0, 128, 0));
+		p2Add200Button.setFont(new Font("Tahoma", Font.PLAIN, 25));
+		p2Add200Button.setBounds(110, 268, 256, 40);
+		p2Add200Button.addActionListener((new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				System.out.println("P2 add $200 button!");
+				System.out.println(players[1].getName());
+				players[1].addMoney(200);
+				player_label2.setText("$" + Integer.toString(players[1].getMoney()));
+				panel_2.repaint();
+			}
+		}));
+		panel_2.add(p2Add200Button);
+		
+		p2AddMoneyButton.setBackground(new Color(0, 128, 0));
+		p2AddMoneyButton.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		p2AddMoneyButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			//put code here
+				System.out.println("p2 add money regular!");
+				players[1].addMoney(Integer.parseInt(p2MoneyAmount.getText()));
+				player_label2.setText("$" + Integer.toString(players[1].getMoney()));
+				panel_2.repaint();
 			}
 		});
-		btnNewButton_4.setBounds(110, 371, 246, 23);
+		p2AddMoneyButton.setBounds(110, 371, 246, 23);
 		
-		panel_2.add(btnNewButton_4);
-		btnNewButton_5.setBackground(new Color(165, 42, 42));
-		btnNewButton_5.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		btnNewButton_5.setBounds(110, 405, 246, 23);
+		panel_2.add(p2AddMoneyButton);
+		p2RemoveMoneyButton.setBackground(new Color(165, 42, 42));
+		p2RemoveMoneyButton.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		p2RemoveMoneyButton.setBounds(110, 405, 246, 23);
+		p2RemoveMoneyButton.addActionListener((new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("p2 remove money button");
+				System.out.println(players[1].getName());
+				try{
+					players[1].removeMoney(Integer.parseInt(p2MoneyAmount.getText()));
+				player_label2.setText("$" + Integer.toString(players[1].getMoney()));
+				panel_2.repaint();
+				}
+				catch (IllegalArgumentException op){
+					JFrame error = new JFrame(players[1].getName());
+					error.setSize(675, 200);
+					JLabel errormsg = new JLabel("Insufficient Funds! Mortgage or Bankrupt!");
+					errormsg.setFont(new Font("Tahoma", Font.BOLD, 30));
+					errormsg.setForeground(Color.red);
+					error.add(errormsg);
+					error.setLocationRelativeTo(null);
+					error.setVisible(true);
+				}
+			}
+		}));
 		
-		panel_2.add(btnNewButton_5);
-		label.setBackground(Color.WHITE);
-		label.setHorizontalAlignment(SwingConstants.CENTER);
-		label.setForeground(new Color(0, 128, 0));
-		label.setOpaque(true);
-		label.setFont(new Font("Comic Sans MS", Font.PLAIN, 50));
-		label.setBounds(10, 439, 420, 100);
+		panel_2.add(p2RemoveMoneyButton);
+		player_label2.setBackground(Color.WHITE);
+		player_label2.setHorizontalAlignment(SwingConstants.CENTER);
+		player_label2.setForeground(new Color(0, 128, 0));
+		player_label2.setOpaque(true);
+		player_label2.setFont(new Font("Comic Sans MS", Font.PLAIN, 50));
+		player_label2.setBounds(10, 439, 420, 100);
 		
-		panel_2.add(label);
+		panel_2.add(player_label2);
 		
-		panel_2.add(textField_1);
-		comboBox_3.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		comboBox_3.setBounds(134, 11, 199, 53);
-		
-		panel_2.add(comboBox_3);
+		panel_2.add(p2MoneyAmount);
+		p2DropDown.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		p2DropDown.setBounds(134, 11, 199, 53);
+		p2DropDown.setModel(new DefaultComboBoxModel<String>(playerlist));
+		p2DropDown.addActionListener((new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				players[1].setName((String) p2DropDown.getSelectedItem());
+				//repaint panel + change label!
+		}}));
+		p2DropDown.setSelectedItem(players[1].getName());
+
+		panel_2.add(p2DropDown);
 		panel_3.setBorder(new LineBorder(new Color(0, 0, 0), 10, true));
 		panel_3.setBounds(970, 149, 440, 550);
 		
@@ -233,36 +322,83 @@ public class Monopoly extends JFrame {
 		lblNewLabel_2.setIcon(new ImageIcon("resources//monopoly.png"));
 		
 		panel_3.add(lblNewLabel_2);
-		btnNewButton_6.setBackground(new Color(0, 128, 0));
-		btnNewButton_6.setFont(new Font("Tahoma", Font.PLAIN, 25));
-		btnNewButton_6.setBounds(100, 273, 256, 40);
+		p3Add200Button.setBackground(new Color(0, 128, 0));
+		p3Add200Button.setFont(new Font("Tahoma", Font.PLAIN, 25));
+		p3Add200Button.setBounds(100, 273, 256, 40);
+		p3Add200Button.addActionListener((new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("p3 add 200 button!");
+				System.out.println(players[2].getName());
+				players[2].addMoney(200);
+				player_label3.setText("$" + Integer.toString(players[2].getMoney()));
+				panel_3.repaint();
+			}
+		} ));
 		
-		panel_3.add(btnNewButton_6);
-		btnNewButton_7.setBackground(new Color(0, 128, 0));
-		btnNewButton_7.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		btnNewButton_7.setBounds(100, 379, 256, 23);
+		panel_3.add(p3Add200Button);
 		
-		panel_3.add(btnNewButton_7);
-		btnNewButton_8.setBackground(new Color(165, 42, 42));
-		btnNewButton_8.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		btnNewButton_8.setBounds(100, 413, 256, 23);
+		p3AddMoneyButton.setBackground(new Color(0, 128, 0));
+		p3AddMoneyButton.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		p3AddMoneyButton.setBounds(100, 379, 256, 23);
+		p3AddMoneyButton.addActionListener((new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("p3 add regular money!");
+				System.out.println(players[2].getName());
+				players[2].addMoney(Integer.parseInt(p3MoneyAmount.getText()));
+				player_label3.setText("$" + Integer.toString(players[2].getMoney()));
+				panel_3.repaint();
+			}
+		}));
 		
-		panel_3.add(btnNewButton_8);
-		label_1.setOpaque(true);
-		label_1.setBackground(Color.WHITE);
-		label_1.setHorizontalAlignment(SwingConstants.CENTER);
-		label_1.setForeground(new Color(0, 128, 0));
-		label_2.setOpaque(true);
-		label_1.setFont(new Font("Comic Sans MS", Font.PLAIN, 50));
-		label_1.setBounds(10, 447, 420, 92);
+		panel_3.add(p3AddMoneyButton);
+		p3RemoveMoneyButton.setBackground(new Color(165, 42, 42));
+		p3RemoveMoneyButton.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		p3RemoveMoneyButton.setBounds(100, 413, 256, 23);
+		p3RemoveMoneyButton.addActionListener((new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("p3 remove money button!");
+				System.out.println(players[2].getName());
+				try{
+					players[2].removeMoney(Integer.parseInt(p3MoneyAmount.getText()));
+				player_label3.setText("$" + Integer.toString(players[2].getMoney()));
+				panel_3.repaint();
+				}
+				catch (IllegalArgumentException os){
+					JFrame error = new JFrame(players[2].getName());
+					error.setSize(675, 200);
+					JLabel errormsg = new JLabel("Insufficient Funds! Mortgage or Bankrupt!");
+					errormsg.setFont(new Font("Tahoma", Font.BOLD, 30));
+					errormsg.setForeground(Color.red);
+					error.add(errormsg);
+					error.setLocationRelativeTo(null);
+					error.setVisible(true);
+				}
+			}
+		}));
 		
-		panel_3.add(label_1);
+		panel_3.add(p3RemoveMoneyButton);
+		player_label3.setOpaque(true);
+		player_label3.setBackground(Color.WHITE);
+		player_label3.setHorizontalAlignment(SwingConstants.CENTER);
+		player_label3.setForeground(new Color(0, 128, 0));
+		player_label4.setOpaque(true);
+		player_label3.setFont(new Font("Comic Sans MS", Font.PLAIN, 50));
+		player_label3.setBounds(10, 447, 420, 92);
 		
-		panel_3.add(textField_2);
-		comboBox_4.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		comboBox_4.setBounds(134, 11, 199, 53);
+		panel_3.add(player_label3);
 		
-		panel_3.add(comboBox_4);
+		panel_3.add(p3MoneyAmount);
+		p3DropDown.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		p3DropDown.setBounds(134, 11, 199, 53);
+		p3DropDown.setModel(new DefaultComboBoxModel<String>(playerlist));
+		p3DropDown.addActionListener((new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				players[2].setName((String) p3DropDown.getSelectedItem());
+				//repaint panel + change label!
+		}}));
+		p3DropDown.setSelectedItem(players[2].getName());
+
+		panel_3.add(p3DropDown);
 		panel_4.setBorder(new LineBorder(new Color(0, 0, 0), 10, true));
 		panel_4.setBounds(1454, 149, 440, 550);
 		
@@ -275,35 +411,79 @@ public class Monopoly extends JFrame {
 		lblNewLabel_3.setIcon(new ImageIcon("resources//monopoly.png"));
 		
 		panel_4.add(lblNewLabel_3);
-		btnNewButton_9.setBackground(new Color(0, 128, 0));
-		btnNewButton_9.setFont(new Font("Tahoma", Font.PLAIN, 25));
-		btnNewButton_9.setBounds(100, 277, 256, 40);
+		p4Add200Button.setBackground(new Color(0, 128, 0));
+		p4Add200Button.setFont(new Font("Tahoma", Font.PLAIN, 25));
+		p4Add200Button.setBounds(100, 277, 256, 40);
+		p4Add200Button.addActionListener((new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("p4 add 200 button!");
+				System.out.println(players[3].getName());
+				players[3].addMoney(200);
+				player_label4.setText("$" + Integer.toString(players[3].getMoney()));
+				panel_4.repaint();
+			}
+		} ));
+		panel_4.add(p4Add200Button);
+		p4AddMoneyButton.setBackground(new Color(0, 128, 0));
+		p4AddMoneyButton.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		p4AddMoneyButton.setBounds(100, 381, 256, 23);
+		p4AddMoneyButton.addActionListener((new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("p4 add regular money!");
+				System.out.println(players[0].getName());
+				players[3].addMoney(Integer.parseInt(p4MoneyAmount.getText()));
+				player_label4.setText("$" + Integer.toString(players[3].getMoney()));
+				panel_4.repaint();
+			}
+		} ));
 		
-		panel_4.add(btnNewButton_9);
-		btnNewButton_10.setBackground(new Color(0, 128, 0));
-		btnNewButton_10.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		btnNewButton_10.setBounds(100, 381, 256, 23);
+		panel_4.add(p4AddMoneyButton);
+		p4RemoveMoneyButton.setBackground(new Color(165, 42, 42));
+		p4RemoveMoneyButton.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		p4RemoveMoneyButton.setBounds(100, 415, 256, 23);
+		p4RemoveMoneyButton.addActionListener((new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("p4 remove money button!");
+				System.out.println(players[0].getName());
+				try{
+					players[3].removeMoney(Integer.parseInt(p4MoneyAmount.getText()));
+				player_label4.setText("$" + Integer.toString(players[3].getMoney()));
+				panel_4.repaint();
+				}
+				catch (IllegalArgumentException um){;
+				JFrame error = new JFrame(players[3].getName());
+				error.setSize(675, 200);
+				JLabel errormsg = new JLabel("Insufficient Funds! Mortgage or Bankrupt!");
+				errormsg.setFont(new Font("Tahoma", Font.BOLD, 30));
+				errormsg.setForeground(Color.red);
+				error.add(errormsg);
+				error.setLocationRelativeTo(null);
+				error.setVisible(true);
+				}
+			}
+		} ));
+		panel_4.add(p4RemoveMoneyButton);
+		player_label4.setBackground(Color.WHITE);
+		player_label4.setHorizontalAlignment(SwingConstants.CENTER);
+		player_label4.setOpaque(true);
+		player_label4.setForeground(new Color(0, 128, 0));
+		player_label4.setFont(new Font("Comic Sans MS", Font.PLAIN, 50));
+		player_label4.setBounds(10, 449, 420, 90);
 		
-		panel_4.add(btnNewButton_10);
-		btnNewButton_11.setBackground(new Color(165, 42, 42));
-		btnNewButton_11.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		btnNewButton_11.setBounds(100, 415, 256, 23);
+		panel_4.add(player_label4);
 		
-		panel_4.add(btnNewButton_11);
-		label_2.setBackground(Color.WHITE);
-		label_2.setHorizontalAlignment(SwingConstants.CENTER);
-		label_2.setOpaque(true);
-		label_2.setForeground(new Color(0, 128, 0));
-		label_2.setFont(new Font("Comic Sans MS", Font.PLAIN, 50));
-		label_2.setBounds(10, 449, 420, 90);
-		
-		panel_4.add(label_2);
-		
-		panel_4.add(textField_3);
-		comboBox_5.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		comboBox_5.setBounds(128, 11, 199, 53);
-		
-		panel_4.add(comboBox_5);
+		panel_4.add(p4MoneyAmount);
+		p4DropDown.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		p4DropDown.setBounds(128, 11, 199, 53);
+		p4DropDown.setModel(new DefaultComboBoxModel<String>(playerlist));
+		p4DropDown.addActionListener((new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				players[3].setName((String) p4DropDown.getSelectedItem());
+				//repaint panel + change label!
+		}}));
+		p4DropDown.setSelectedItem(players[3].getName());
+
+		panel_4.add(p4DropDown);
 		panel_5.setBackground(new Color(192, 192, 192));
 		panel_5.setBorder(new LineBorder(new Color(0, 0, 0), 10, true));
 		panel_5.setBounds(982, 725, 701, 288);
@@ -317,12 +497,12 @@ public class Monopoly extends JFrame {
 		panel_5.add(panel_7);
 		panel_7.setBorder(new LineBorder(new Color(0, 0, 0), 10, true));
 		panel_7.setLayout(null);
-		lblNewLabel_6.setBounds(30, 79, 236, 64);
-		panel_7.add(lblNewLabel_6);
-		lblNewLabel_6.setOpaque(true);
-		lblNewLabel_6.setForeground(Color.GREEN);
-		lblNewLabel_6.setFont(new Font("Comic Sans MS", Font.PLAIN, 45));
-		lblNewLabel_6.setBackground(SystemColor.textInactiveText);
+		potMoney.setBounds(30, 79, 236, 64);
+		panel_7.add(potMoney);
+		potMoney.setOpaque(true);
+		potMoney.setForeground(Color.GREEN);
+		potMoney.setFont(new Font("Comic Sans MS", Font.PLAIN, 45));
+		potMoney.setBackground(SystemColor.textInactiveText);
 		label_3.setBounds(266, 47, 0, 0);
 		
 		panel_7.add(label_3);
@@ -336,29 +516,67 @@ public class Monopoly extends JFrame {
 		lblPot.setFont(new Font("Comic Sans MS", Font.PLAIN, 50));
 		
 		panel_6.add(lblPot);
-		btnNewButton_12.setBackground(Color.GREEN);
-		btnNewButton_12.setFont(new Font("Tahoma", Font.PLAIN, 25));
-		btnNewButton_12.addActionListener(new ActionListener() {
+		transferButton.setBackground(Color.GREEN);
+		transferButton.setFont(new Font("Tahoma", Font.PLAIN, 25));
+		
+		transferButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				System.out.println("transferring money!");
+				String donator = (String) transferFromBox.getSelectedItem();
+				String acceptor = (String) transferToBox.getSelectedItem();
+				//subtract money
+				for(Player p : players){
+					if(p.getName().equals(donator))
+						try{
+						p.removeMoney(Integer.parseInt(transferAmount.getText()));}
+						catch (IllegalArgumentException mo){
+							JFrame error = new JFrame(p.getName());
+							error.setSize(675, 200);
+							JLabel errormsg = new JLabel("Insufficient Funds! Mortgage or Bankrupt!");
+							errormsg.setFont(new Font("Tahoma", Font.BOLD, 30));
+							errormsg.setForeground(Color.red);
+							error.add(errormsg);
+							error.setLocationRelativeTo(null);
+							error.setVisible(true);
+							return;}
+				}
+				//did NOT include checking to see if player there... oh well
+				for(Player p : players){
+					if(p.getName().equals(acceptor))
+						p.addMoney(Integer.parseInt(transferAmount.getText()));
+						player_label1.setText("$"+Integer.toString(players[0].getMoney()));
+						player_label2.setText("$"+Integer.toString(players[1].getMoney()));
+						player_label3.setText("$"+Integer.toString(players[2].getMoney()));
+						player_label4.setText("$"+Integer.toString(players[3].getMoney()));
+						potMoney.setText("$" + Integer.toString(players[4].getMoney()));
+						contentPane.repaint(); //stopppp
+				}
 			}
 		});
-		btnNewButton_12.setBounds(390, 197, 196, 62);
+		transferButton.setBounds(390, 197, 196, 62);
 		
-		panel_6.add(btnNewButton_12);
-		comboBox.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		comboBox.setModel(new DefaultComboBoxModel(new String[] {"Bailey", "Isaiah", "Tyler", "Sean", "Pot"}));
-		comboBox.setBounds(390, 21, 199, 53);
+		panel_6.add(transferButton);
+		transferFromBox.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		//System.out.println(listPlaying);
+		transferFromBox.setModel(new DefaultComboBoxModel<String>(listPlaying));
+		transferFromBox.setBounds(390, 21, 199, 53);
 		
-		panel_6.add(comboBox);
-		comboBox_1.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		comboBox_1.setModel(new DefaultComboBoxModel(new String[] {"Bailey", "Sean", "Isaiah", "Tyler", "Pot"}));
-		comboBox_1.setBounds(387, 79, 199, 53);
+		panel_6.add(transferFromBox);
+		transferToBox.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		transferToBox.setModel(new DefaultComboBoxModel<String>(listPlaying));
+		transferToBox.setBounds(387, 79, 199, 53);
 		
-		panel_6.add(comboBox_1);
+		panel_6.add(transferToBox);
 		
-		panel_6.add(textField_4);
+		panel_6.add(transferAmount);
 		lblNewLabel_7.setBounds(0, 0, 1894, 1013);
 		contentPane.add(lblNewLabel_7);
 		lblNewLabel_7.setIcon(new ImageIcon("resources\\background.jpg"));
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 }

@@ -14,20 +14,57 @@ public class HttpWebServer{
 	private ServerSocket s;
 	private int port = 0;
 	private HttpRequest clientRequest;
-	
+	private Monopoly monopoly;
+	private String main_url; //main website html code
+	private String personal_url; //personal player website html code
 	public HttpWebServer(){
 		
 	}
-	public HttpWebServer(int port) throws IOException{
+	public HttpWebServer(int port, Monopoly mon) throws IOException{
+		this.monopoly = mon;
 		System.out.println("Beginning server now!");
+		try{
+			FileReader fr = new FileReader("main.htm");
+			BufferedReader br = new BufferedReader(fr);
+			System.out.println("Found the file!");
+			main_url = "";
+			while(true){
+				String temp = br.readLine();
+				if(temp == null)
+					break;
+				else
+					main_url += temp;
+			}
+			br.close();
+			
+			fr = new FileReader("player.htm");
+			br = new BufferedReader(fr);
+			System.out.println("Found the second file!");
+			personal_url = "";
+			while(true){
+				String temp = br.readLine();
+				if(temp == null)
+					break;
+				else
+					personal_url += temp;
+			}
+			br.close();
+			//now change some contents of file appropriately!
+			
+		}
+		catch(FileNotFoundException fne){
+			System.out.println("Did not find file!");
+			return;
+		}
+
 		this.port = port;
 		s = new ServerSocket(port);
 		ServeForever();
 	}
-	public static void main(String[] args) throws Exception { //expected to be given port number
+	//public static void main(String[] args) throws Exception { //expected to be given port number
 		//new HttpWebServer(Integer.parseInt(args[0]));
-		new HttpWebServer(Integer.parseInt("8080"));
-	}
+		//new HttpWebServer(Integer.parseInt("8080"));
+	//}
 	
 	public void ServeForever(){
 		if(port == 0)
@@ -55,42 +92,10 @@ public class HttpWebServer{
 				dos.writeUTF("HTTP/1.1 302 Found\r\nLocation: " +"/index.htm\r\n");
 			}
 			System.out.println("Came back son!");
-			try{
-				FileReader fr = new FileReader(clientRequest.getFileName());
-				BufferedReader br = new BufferedReader(fr);
-				System.out.println("Found the file!");
-				String html_String = "";
-				while(true){
-					String temp = br.readLine();
-					if(temp == null)
-						break;
-					else
-						html_String += temp;
-				}
-				br.close();
-				HttpResponse resp = new HttpResponse();
-				resp.setStatus(200);
-				resp.setLength(html_String.getBytes().length); //does whatever
-				handleRequest();
-				System.out.println(resp + html_String);
-				dos.writeUTF(resp.toString() + html_String);
-				if(resp.connection.equalsIgnoreCase("Keep-alive")){
-					System.out.println(dis.readLine());	
-				}
-			}
-			catch(FileNotFoundException fne){
-				System.out.println("Did not find file!");
-				//return status code 404 not found
-				HttpResponse resp = new HttpResponse();
-				resp.setStatus(404);
-				String notFoundMessage = "<!DOCTYPE HTML PUBLIC \"-//IETF//DTD HTML 2.0//EN\"><html><head><title>404 Not Found</title></head><body><h1>Not Found</h1><p>The requested URL "+clientRequest.getRequestedURL()+".html was not found on this server.</p></body></html>";
-				resp.setLength(notFoundMessage.getBytes().length);
-				System.out.println("red");
-				handleRequest();
-				System.out.println("Pop:" + resp);
-				dos.writeUTF(resp.toString() + notFoundMessage);
-			}
+			//find out if url matches , get proper file, replace elements, and send it out!
+			//I am the thunder, the lightning, and the river
 			
+			//end of strategy
 			clientSocket.close();
 			}
 			catch(Exception e){;}
