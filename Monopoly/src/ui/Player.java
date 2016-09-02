@@ -220,8 +220,6 @@ public class Player extends JPanel{
 	
 	public void checkBankrupt() {
 		if(balance == 0) {
-			this.set
-			this.setBackground(Color.TRANSLUCENT);
 			this.setOpaque(false);
 			
 		}
