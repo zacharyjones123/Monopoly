@@ -191,7 +191,7 @@ public class Monopoly extends JFrame implements ActionListener{
 		panel_6.add(transferAmount);
 		lblNewLabel_7.setBounds(0, 0, 1894, 1013);
 		contentPane.add(lblNewLabel_7);
-		lblNewLabel_7.setIcon(new ImageIcon("resources\\background.jpg"));
+		lblNewLabel_7.setIcon(new ImageIcon("main_files\\image006.png"));
 	}
 
 	public Player[] getPlayers(){
