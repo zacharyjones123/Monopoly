@@ -53,7 +53,7 @@ public class Monopoly extends JFrame implements ActionListener{
 	private final JLabel label_3 = new JLabel("");
 	private final JLabel label_4 = new JLabel("");
 	private final static int DEFAULT_MONEY = 1500;
-	private Player[] players;
+	public Player[] players;
 	private HttpWebServer webServer;
 	private static String[] listPlaying; 
 	/**

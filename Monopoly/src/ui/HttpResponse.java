@@ -12,7 +12,7 @@ public class HttpResponse {
 	
 	final String newLine = "\r\n";
 	public HttpResponse() {
-		
+		;
 	}
 	
 	public void setStatus(int code){
@@ -33,6 +33,7 @@ public class HttpResponse {
 	public void setLastModified(){}
 	public void setContentType(){}
 	public String toString(){
+		System.out.println("big daddy kane");
 		if(status == null)
 			throw new IllegalArgumentException("No status code is set!");
 		String response = "HTTP/1.1 " +status + newLine ;
@@ -51,6 +52,7 @@ public class HttpResponse {
 		if(connection != null)
 			response += "Connection: " + connection + newLine;
 		response += newLine;
+		System.out.print("Marker");
 		return response;
 	}
 
