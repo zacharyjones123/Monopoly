@@ -95,12 +95,14 @@ public class HttpWebServer implements Runnable{
 			if(clientRequest.getFileName().isEmpty()){
 				System.out.println("*******Redirecting******");
 				dos.writeUTF("HTTP/1.1 302 Found\r\nLocation: " +"/index\r\n");
+				dos.close();
+				continue;
 				//return + socket close?
 			}
 			System.out.println("Came back son!");
 			//find out if url matches , get proper file, replace elements, and send it out!
 			//I am the thunder, the lightning, and the river
-			if (clientRequest.getFileName() == "index")
+			if (clientRequest.getFileName().equals("index"))
 			{
 				System.out.println("it works");
 			HttpResponse resp = new HttpResponse();
@@ -125,7 +127,7 @@ public class HttpWebServer implements Runnable{
 			//end of strategy
 			clientSocket.close();
 			}
-			else if(clientRequest.getFileName().equals(monopoly.players[0]) || clientRequest.getFileName().equals(monopoly.players[1]) || clientRequest.getFileName().equals(monopoly.players[2]) || clientRequest.getFileName().equals(monopoly.players[3]))
+			else if (clientRequest.getFileName().equals(monopoly.players[0]) || clientRequest.getFileName().equals(monopoly.players[1]) || clientRequest.getFileName().equals(monopoly.players[2]) || clientRequest.getFileName().equals(monopoly.players[3]))
 			{
 				HttpResponse resp = new HttpResponse();
 				resp.setStatus(200);
