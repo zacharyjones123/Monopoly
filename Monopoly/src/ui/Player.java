@@ -188,7 +188,7 @@ public class Player extends JPanel{
 		this.balance += money;
 		money_label.setText("$" + Integer.toString(this.balance));
 		repaint();
-		System.out.println("Total money: " + this.balance);
+		System.out.println( this.name + " total money: " + this.balance);
 	}
 
 	public void removeMoney(int money) throws IllegalArgumentException{

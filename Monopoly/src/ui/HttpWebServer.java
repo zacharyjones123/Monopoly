@@ -108,14 +108,14 @@ public class HttpWebServer implements Runnable{
 			HttpResponse resp = new HttpResponse();
 			resp.setStatus(200);
 			String temp_url = main_url;
-			temp_url = temp_url.replace("Sean", monopoly.players[0].getName());
-			temp_url = temp_url.replace("Isaiah", monopoly.players[1].getName());
-			temp_url = temp_url.replace("Zach", monopoly.players[2].getName());
-			temp_url = temp_url.replace("Bailey", monopoly.players[3].getName());
-			temp_url = temp_url.replace("$100", Integer.toString(monopoly.players[0].getMoney()));
-			temp_url = temp_url.replace("$200", Integer.toString(monopoly.players[1].getMoney()));
-			temp_url = temp_url.replace("$344", Integer.toString(monopoly.players[2].getMoney()));
-			temp_url = temp_url.replace("$522", Integer.toString(monopoly.players[3].getMoney()));
+			temp_url = temp_url.replace("player_one", monopoly.players[0].getName());
+			temp_url = temp_url.replace("player_two", monopoly.players[1].getName());
+			temp_url = temp_url.replace("player_three", monopoly.players[2].getName());
+			temp_url = temp_url.replace("player_four", monopoly.players[3].getName());
+			temp_url = temp_url.replace("money_1", Integer.toString(monopoly.players[0].getMoney()));
+			temp_url = temp_url.replace("money_2", Integer.toString(monopoly.players[1].getMoney()));
+			temp_url = temp_url.replace("money_3", Integer.toString(monopoly.players[2].getMoney()));
+			temp_url = temp_url.replace("money_4", Integer.toString(monopoly.players[3].getMoney()));
 			
 			resp.setLength(temp_url.length());
 			System.out.println("truh");
