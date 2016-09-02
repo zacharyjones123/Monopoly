@@ -10,15 +10,19 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class HttpWebServer{
+public class HttpWebServer implements Runnable{
 	private ServerSocket s;
 	private int port = 0;
 	private HttpRequest clientRequest;
 	private Monopoly monopoly;
 	private String main_url; //main website html code
 	private String personal_url; //personal player website html code
+	private Player[] players;
 	public HttpWebServer(){
 		
+	}
+	public void setPlayerList(Player[] p){
+		players = p;
 	}
 	public HttpWebServer(int port, Monopoly mon) throws IOException{
 		this.monopoly = mon;
@@ -37,7 +41,7 @@ public class HttpWebServer{
 			}
 			br.close();
 			
-			fr = new FileReader("player.htm");
+			/*fr = new FileReader("player.htm");
 			br = new BufferedReader(fr);
 			System.out.println("Found the second file!");
 			personal_url = "";
@@ -50,7 +54,7 @@ public class HttpWebServer{
 			}
 			br.close();
 			//now change some contents of file appropriately!
-			
+		*/	
 		}
 		catch(FileNotFoundException fne){
 			System.out.println("Did not find file!");
@@ -59,7 +63,7 @@ public class HttpWebServer{
 
 		this.port = port;
 		s = new ServerSocket(port);
-		ServeForever();
+		new Thread(this).start();
 	}
 	//public static void main(String[] args) throws Exception { //expected to be given port number
 		//new HttpWebServer(Integer.parseInt(args[0]));
@@ -94,7 +98,7 @@ public class HttpWebServer{
 			System.out.println("Came back son!");
 			//find out if url matches , get proper file, replace elements, and send it out!
 			//I am the thunder, the lightning, and the river
-			
+			dos.writeUTF(main_url);
 			//end of strategy
 			clientSocket.close();
 			}
@@ -107,6 +111,12 @@ public class HttpWebServer{
 	}
 	
 	public void setPort(){}
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		System.out.println("Web server beginning!");
+		ServeForever();
+	}
 
 
 }
