@@ -55,7 +55,8 @@ public class Monopoly extends JFrame implements ActionListener{
 	private final static int DEFAULT_MONEY = 1500;
 	public Player[] players;
 	private HttpWebServer webServer;
-	private static String[] listPlaying; 
+	private static String[] listPlaying;
+	public int pot = 0;
 	/**
 	 * Launch the application.
 	 */
@@ -78,7 +79,7 @@ public class Monopoly extends JFrame implements ActionListener{
 	 * @throws IOException 
 	 */
 	public Monopoly() throws IOException {
-		webServer = new HttpWebServer(80, this);
+		webServer = new HttpWebServer(8080, this);
 		transferAmount.setBounds(384, 143, 196, 43);
 		transferAmount.setColumns(10);
 		transferAmount.setFont(new Font("Tahoma", Font.PLAIN, 25));
@@ -87,8 +88,8 @@ public class Monopoly extends JFrame implements ActionListener{
 		players[1] = new Player("Sean", DEFAULT_MONEY, "dummy", 485, 149);
 		players[2] = new Player("Bailey", DEFAULT_MONEY, "Dummy", 965, 149);
 		players[3] = new Player("Tyler", DEFAULT_MONEY , "dummy", 1440, 149);
-		//players[4] = new Player("POT", 0, "pot.jpg");
-		listPlaying = new String[]{players[0].getName(), players[1].getName(), players[2].getName(), players[3].getName()}; //players[4].getName()};
+		//players[4] = new Player("POT", 0, "dummy", "pot.jpg");
+		listPlaying = new String[]{players[0].getName(), players[1].getName(), players[2].getName(), players[3].getName(), "Pot"}; //, players[4].getName()};
 
 		initGUI();
 	}
@@ -99,6 +100,7 @@ public class Monopoly extends JFrame implements ActionListener{
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1920, 1062);
 		contentPane = new JPanel();
+		contentPane.setLayout(new FlowLayout());
 		contentPane.setForeground(SystemColor.desktop);
 		contentPane.setBackground(SystemColor.activeCaption);
 		contentPane.setBorder(new SoftBevelBorder(BevelBorder.RAISED, SystemColor.windowText, SystemColor.activeCaption, SystemColor.desktop, SystemColor.activeCaption));
@@ -110,8 +112,10 @@ public class Monopoly extends JFrame implements ActionListener{
 
 		contentPane.add(panel);
 		lblMonopolyBank.setFont(new Font("Tahoma", Font.PLAIN, 70));
+		JButton resetButton = new JButton("RESET");
 
 		panel.add(lblMonopolyBank);
+		panel.add(resetButton);
 
 
 		contentPane.add(players[0]);
@@ -154,12 +158,52 @@ public class Monopoly extends JFrame implements ActionListener{
 		panel_6.add(lblPot);
 		transferButton.setBackground(Color.GREEN);
 		transferButton.setFont(new Font("Tahoma", Font.PLAIN, 25));
+		
+		resetButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//add that money
+				for(Player p : players){
+					p.setMoney(1500);
+					pot = 0;
+					potMoney.setText(String.valueOf(pot));
+					p.reset();
+				}
+			}
+		});
 
 		transferButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("transferring money!");
 				String donator = (String) transferFromBox.getSelectedItem();
 				String acceptor = (String) transferToBox.getSelectedItem();
+				
+				//Special circumstance for pot
+				//donator is pot
+				if (donator.equals("Pot")) {
+					//This means that the money from the pot is going to somebody
+					if (pot - Integer.parseInt(transferAmount.getText()) < 0 ) {
+						players[0].createErrorWindow();
+						return;
+					}
+					pot -= Integer.parseInt(transferAmount.getText());
+					potMoney.setText(String.valueOf(pot));
+					//add that money
+					for(Player p : players){
+						if(p.getName().equals(acceptor))
+							p.addMoney(Integer.parseInt(transferAmount.getText()));
+						webServer.setPlayerList(players);
+
+					}
+				}
+				//acceptor is pot
+				else if (acceptor.equals("Pot")) {
+					//This means that somebody is giving money to the pot
+					pot += Integer.parseInt(transferAmount.getText());
+					potMoney.setText(String.valueOf(pot));
+					for(Player p : players){
+						if(p.getName().equals(donator))
+							p.removeMoney(Integer.parseInt(transferAmount.getText()));}
+				} else {
 				//subtract money
 				for(Player p : players){
 					if(p.getName().equals(donator))
@@ -171,6 +215,9 @@ public class Monopoly extends JFrame implements ActionListener{
 					webServer.setPlayerList(players);
 
 				}
+				
+				
+			}
 			}
 		});
 		transferButton.setBounds(390, 197, 196, 62);

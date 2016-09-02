@@ -87,6 +87,7 @@ public class Player extends JPanel{
 		MoneyAmount.setBackground(Color.WHITE);
 		MoneyAmount.setBounds(100, 323, 256, 47 );
 		MoneyAmount.setColumns(10);
+		MoneyAmount.setFont(new Font(Font.SANS_SERIF, 0, 30));
 		money_label.setBounds(10, 447, 420, 92);
 		money_label.setBackground(Color.WHITE);
 		money_label.setOpaque(true);
@@ -189,15 +190,20 @@ public class Player extends JPanel{
 		money_label.setText("$" + Integer.toString(this.balance));
 		repaint();
 		System.out.println( this.name + " total money: " + this.balance);
+		checkBankrupt();
 	}
 
 	public void removeMoney(int money) throws IllegalArgumentException{
-		if(this.balance - money < 0)
-			throw new IllegalArgumentException("Can't go negative");
+		if(this.balance - money < 0){
+			//throw new IllegalArgumentException("Can't go negative");
+			createErrorWindow();
+			return;
+		}
 		this.balance -= money;
 		money_label.setText("$" + Integer.toString(balance));
 		repaint();
 		System.out.println("Total money: " + balance);
+		checkBankrupt();
 	}
 	public void setFilename(String filename) {
 		this.filename = filename;
@@ -211,4 +217,15 @@ public class Player extends JPanel{
 		error.add(errormsg);
 		error.setLocationRelativeTo(null);
 		error.setVisible(true);}
+	
+	public void checkBankrupt() {
+		if(balance == 0) {
+			this.setOpaque(false);
+			
+		}
+	}
+	
+	public void reset() {
+		this.setOpaque(true);
+	}
 }
