@@ -28,15 +28,16 @@ import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
 
 public class Player extends JPanel{
-	/* The name of the player */
-	public String name;
-	/* amount of money */
-	public int money;
-	/* File name of pic */
-	public String filename;
 	private static final int DEFAULT_MONEY = 1500;
 	private static final int WIDTH = 440;
 	private static final int HEIGHT = 550;
+	/* The name of the player */
+	public String name;
+	/* amount of money */
+	private int balance = DEFAULT_MONEY;
+	/* File name of pic */
+	public String filename;
+
 	private static String[] playerlist = {"Bailey", "Sean", "Isaiah", "Tyler", "Alex", "Pot"};
 
 	//private final JLabel idk_label;
@@ -48,22 +49,22 @@ public class Player extends JPanel{
 	private JTextField MoneyAmount;
 	private JComboBox nameDropDown;
 	private int x_location, y_location;
-	
+
 	/**
- 	 * Constructor of the Player class
+	 * Constructor of the Player class
 	 */
 	public Player() {
 		this.name = "";
-		this.money = 1500;
+		this.balance = 1500;
 		this.filename = "";
 		buildGUI();
 	}
-	
+
 	public Player(String name, int money, String filename, int locx, int locy) {
 		this.x_location = locx;
 		this.y_location = locy;
 		this.name = name;
-		this.money = money;
+		this.balance = money;
 		this.filename = filename;
 		buildGUI();
 	}
@@ -71,23 +72,19 @@ public class Player extends JPanel{
 		this.x_location = xloc;
 		this.y_location = yloc;
 	}
-	
+
 	private void buildGUI() {
-		money_label = new JLabel("$"+Integer.toString(DEFAULT_MONEY));
+		money_label = new JLabel("$"+Integer.toString(balance));
 		image_label = new JLabel(); //image
 		Add200Button = new JButton("+200");
 		AddMoneyButton = new JButton("Add Money");
 		RemoveMoneyButton = new JButton("Remove Money");
 		MoneyAmount = new JTextField();
 		nameDropDown = new JComboBox();
-
-		System.out.println("making "+name+" gui w/ " + 10 + " ," + 149);
 		setBorder(new LineBorder(new Color(0, 90, 0), 10, true));
-		//setBounds(10, 149, 440, 550);
 		setBounds(x_location, y_location, WIDTH, HEIGHT);
 		setLayout(null);
 		MoneyAmount.setBackground(Color.WHITE);
-		//MoneyAmount.setBounds(10 + 90, 149 + 174, 256, 47);
 		MoneyAmount.setBounds(100, 323, 256, 47 );
 		MoneyAmount.setColumns(10);
 		money_label.setBounds(10, 447, 420, 92);
@@ -106,15 +103,11 @@ public class Player extends JPanel{
 		Add200Button.setBounds(100, 270, 256, 40);
 		Add200Button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("Adding 200 to p1!");
-				System.out.println(name);
 				addMoney(200);
-				money_label.setText("$" + Integer.toString(money));
-				repaint();
 				//webServer.setPlayerList(players);
 			}
 		});
-		
+
 		add(Add200Button);
 		//break
 		AddMoneyButton.setFont(new Font("Tahoma", Font.PLAIN, 18));
@@ -122,44 +115,28 @@ public class Player extends JPanel{
 		AddMoneyButton.setBounds(100, 380, 256, 23);
 		AddMoneyButton.addActionListener((new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("Adding 200! P1");
-				System.out.println(name);
 				addMoney(Integer.parseInt(MoneyAmount.getText()));
-				money_label.setText("$" + Integer.toString(money));
-				repaint();
 				//webServer.setPlayerList(players);
-
 			}
 		}));
-		
+
 		add(AddMoneyButton);
 		RemoveMoneyButton.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		RemoveMoneyButton.setBackground(new Color(165, 42, 42));
 		RemoveMoneyButton.setBounds(100, 414, 256, 23);
 		RemoveMoneyButton.addActionListener((new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("Adding special money");
-				System.out.println(name);
 				try{
 					removeMoney(Integer.parseInt(MoneyAmount.getText()));
-				money_label.setText("$" + Integer.toString(money));
-				repaint();
-				//webServer.setPlayerList(players);
+					//webServer.setPlayerList(players);
 				}
 				catch (IllegalArgumentException e1){
-					JFrame error = new JFrame(name);
-					error.setSize(675, 200);
-					JLabel errormsg = new JLabel("Insufficient Funds! Mortgage or Bankrupt!");
-					errormsg.setFont(new Font("Tahoma", Font.BOLD, 30));
-					errormsg.setForeground(Color.red);
-					error.add(errormsg);
-					error.setLocationRelativeTo(null);
-					error.setVisible(true);}
-			}
-		}));
-		
+					createErrorWindow();
+				}
+			}}));
+
 		add(RemoveMoneyButton);
-		
+
 		add(MoneyAmount);
 		nameDropDown.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		nameDropDown.setBounds(129, 11, 199, 53);
@@ -168,11 +145,10 @@ public class Player extends JPanel{
 			public void actionPerformed(ActionEvent e) {
 				name = (String) nameDropDown.getSelectedItem();
 				//webServer.setPlayerList(players);
-				//repaint panel + change label!
-		}}));
+			}}));
 		nameDropDown.setSelectedItem(name);
-	    add(nameDropDown);
-		
+		add(nameDropDown);
+
 		//end of GUI
 	}
 	/**
@@ -183,15 +159,15 @@ public class Player extends JPanel{
 	public String getName() {
 		return name;
 	}
-	
+
 	public int getMoney() {
-		return money;
+		return balance;
 	}
-	
+
 	public String getFilename() {
 		return filename;
 	}
-	
+
 	/**
 	 * Setter method for the name
 	 * 
@@ -199,26 +175,40 @@ public class Player extends JPanel{
 	 */
 	public void setName(String name) {
 		this.name = name;
+		repaint();
 	}
-	
+
 	public void setMoney(int money) {
-		this.money = money;
+		this.balance = money;
+		money_label.setText("$" + Integer.toString(this.balance));
 		repaint();
 	}
-	
+
 	public void addMoney(int money){
-		this.money += money;
+		this.balance += money;
+		money_label.setText("$" + Integer.toString(this.balance));
 		repaint();
+		System.out.println("Total money: " + this.balance);
 	}
-	
+
 	public void removeMoney(int money) throws IllegalArgumentException{
-		if(this.money - money < 0)
+		if(this.balance - money < 0)
 			throw new IllegalArgumentException("Can't go negative");
-		this.money -= money;
+		this.balance -= money;
+		money_label.setText("$" + Integer.toString(balance));
 		repaint();
+		System.out.println("Total money: " + balance);
 	}
 	public void setFilename(String filename) {
 		this.filename = filename;
 	}
-
+	public void createErrorWindow(){
+		JFrame error = new JFrame(name);
+		error.setSize(675, 200);
+		JLabel errormsg = new JLabel("Insufficient Funds! Mortgage or Bankrupt!");
+		errormsg.setFont(new Font("Tahoma", Font.BOLD, 30));
+		errormsg.setForeground(Color.red);
+		error.add(errormsg);
+		error.setLocationRelativeTo(null);
+		error.setVisible(true);}
 }
