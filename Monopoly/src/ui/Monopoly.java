@@ -22,8 +22,13 @@ import javax.swing.JTextArea;
 import java.awt.Font;
 import javax.swing.border.LineBorder;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.event.ActionListener;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Date;
 import java.awt.event.ActionEvent;
 import javax.swing.ImageIcon;
 import javax.swing.SwingConstants;
@@ -31,6 +36,7 @@ import javax.swing.JTextField;
 import javax.swing.JList;
 import javax.swing.ListSelectionModel;
 import javax.swing.AbstractListModel;
+import javax.swing.Box;
 import javax.swing.JScrollPane;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
@@ -53,6 +59,7 @@ public class Monopoly extends JFrame implements ActionListener{
 	private final JLabel label_3 = new JLabel("");
 	private final JLabel label_4 = new JLabel("");
 	private final static int DEFAULT_MONEY = 1500;
+	public final static String newline = System.lineSeparator();
 	public Player[] players;
 	private HttpWebServer webServer;
 	private static String[] listPlaying;
@@ -79,7 +86,7 @@ public class Monopoly extends JFrame implements ActionListener{
 	 * @throws IOException 
 	 */
 	public Monopoly() throws IOException {
-		webServer = new HttpWebServer(8080, this);
+		webServer = new HttpWebServer(80, this);
 		transferAmount.setBounds(384, 143, 196, 43);
 		transferAmount.setColumns(10);
 		transferAmount.setFont(new Font("Tahoma", Font.PLAIN, 25));
@@ -90,7 +97,7 @@ public class Monopoly extends JFrame implements ActionListener{
 		players[3] = new Player("Tyler", DEFAULT_MONEY , "dummy", 1440, 149);
 		//players[4] = new Player("POT", 0, "dummy", "pot.jpg");
 		listPlaying = new String[]{players[0].getName(), players[1].getName(), players[2].getName(), players[3].getName(), "Pot"}; //, players[4].getName()};
-
+		log("--------------------------------------------------------" + newline + "New Monopoly game started!");
 		initGUI();
 	}
 	private void initGUI() {
@@ -113,8 +120,12 @@ public class Monopoly extends JFrame implements ActionListener{
 		contentPane.add(panel);
 		lblMonopolyBank.setFont(new Font("Tahoma", Font.PLAIN, 70));
 		JButton resetButton = new JButton("RESET");
-
+		resetButton.setFont(new Font("Tahoma", Font.BOLD, 25));
+		resetButton.setBounds(400, 10, 100, 80);
+		resetButton.setBackground(Color.red);
+		panel.add(Box.createRigidArea(new Dimension(550,30)));
 		panel.add(lblMonopolyBank);
+		panel.add(Box.createRigidArea(new Dimension(500,30)));
 		panel.add(resetButton);
 
 
@@ -167,6 +178,12 @@ public class Monopoly extends JFrame implements ActionListener{
 					pot = 0;
 					potMoney.setText(String.valueOf(pot));
 					p.reset();
+				}
+				try {
+					log("Reset Monopoly game!");
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
 				}
 			}
 		});
@@ -245,6 +262,13 @@ public class Monopoly extends JFrame implements ActionListener{
 		return players;
 	}
 
+	public void log(String sentence) throws IOException{
+		FileWriter op = new FileWriter("logged.data", true);
+		BufferedWriter po = new BufferedWriter(op); 
+		Date now = new Date();
+		po.write(now.toString() + ": " + sentence + newline);
+		po.close();
+	}
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub

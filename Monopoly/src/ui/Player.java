@@ -13,7 +13,10 @@ import java.awt.Font;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Date;
 import java.util.Random;
 
 import javax.swing.DefaultComboBoxModel;
@@ -144,7 +147,14 @@ public class Player extends JPanel{
 		nameDropDown.setModel(new DefaultComboBoxModel<String>(playerlist));
 		nameDropDown.addActionListener((new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				try {
+					log(name + " name is changed to " + (String) nameDropDown.getSelectedItem());
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				name = (String) nameDropDown.getSelectedItem();
+				
 				//webServer.setPlayerList(players);
 			}}));
 		nameDropDown.setSelectedItem(name);
@@ -183,6 +193,13 @@ public class Player extends JPanel{
 		this.balance = money;
 		money_label.setText("$" + Integer.toString(this.balance));
 		repaint();
+		try {
+			log(name + " balance set to " + Integer.toString(balance) + "!");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 
 	public void addMoney(int money){
@@ -191,6 +208,12 @@ public class Player extends JPanel{
 		repaint();
 		System.out.println( this.name + " total money: " + this.balance);
 		checkBankrupt();
+		try {
+			log(name + " balance set to " + Integer.toString(balance) + "!");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public void removeMoney(int money) throws IllegalArgumentException{
@@ -204,6 +227,12 @@ public class Player extends JPanel{
 		repaint();
 		System.out.println("Total money: " + balance);
 		checkBankrupt();
+		try {
+			log(name + " balance set to " + Integer.toString(balance) + "!");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	public void setFilename(String filename) {
 		this.filename = filename;
@@ -221,11 +250,24 @@ public class Player extends JPanel{
 	public void checkBankrupt() {
 		if(balance == 0) {
 			this.setOpaque(false);
-			
+			try {
+				log(name + " is bankrupt!");
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 	
 	public void reset() {
 		this.setOpaque(true);
+	}
+	
+	public void log(String sentence) throws IOException{
+		FileWriter op = new FileWriter("logged.data", true);
+		BufferedWriter po = new BufferedWriter(op); 
+		Date now = new Date();
+		po.write(now.toString() + ": " + sentence + Monopoly.newline);
+		po.close();
 	}
 }

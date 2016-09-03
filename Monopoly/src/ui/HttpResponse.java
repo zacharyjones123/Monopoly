@@ -7,9 +7,9 @@ public class HttpResponse {
 	String length;
 	String date;
 	String server;
-	String content_type = "text/html";
+	String content_type = "text/html; charset=utf-8";
 	String last_modified;
-	
+	String accept_ranges = "bytes";
 	final String newLine = "\r\n";
 	public HttpResponse() {
 		;
@@ -37,6 +37,8 @@ public class HttpResponse {
 		if(status == null)
 			throw new IllegalArgumentException("No status code is set!");
 		String response = "HTTP/1.1 " +status + newLine ;
+		if(accept_ranges != null)
+			response += "Accept-Ranges: " + accept_ranges + newLine;
 		if(date != null)
 			response += "Date: " + date + newLine;
 		if(server != null)

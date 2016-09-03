@@ -127,8 +127,7 @@ public class HttpWebServer implements Runnable{
 			//end of strategy
 			clientSocket.close();
 			}
-			else if (clientRequest.getFileName().equals(monopoly.players[0]) || clientRequest.getFileName().equals(monopoly.players[1]) || clientRequest.getFileName().equals(monopoly.players[2]) || clientRequest.getFileName().equals(monopoly.players[3]))
-			{
+			else if (clientRequest.getFileName().equalsIgnoreCase(monopoly.players[0].getName()) || clientRequest.getFileName().equalsIgnoreCase(monopoly.players[1].getName()) || clientRequest.getFileName().equalsIgnoreCase(monopoly.players[2].getName()) || clientRequest.getFileName().equalsIgnoreCase(monopoly.players[3].getName()))			{
 				HttpResponse resp = new HttpResponse();
 				resp.setStatus(200);
 				//personal_url.replace
